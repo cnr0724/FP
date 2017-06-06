@@ -22,12 +22,12 @@ public class cards {
 		}
 	}
 	
-	public card cardSelect(){
+	public card cardSelect(cards a){
 		Random random=new Random();
 		int i=random.nextInt(3);
 		int j=random.nextInt(12);
-		card c=deck.get(suits[i], j);
-		deck.get(suits[i], j).cardSelected();
+		card c=a.deck.get(suits[i], j);
+		a.deck.get(suits[i], j).cardSelected();
 		return c;
 	}
 	
