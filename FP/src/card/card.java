@@ -18,12 +18,8 @@ public class card {
 		return this.used;
 	}
 	
-	public int getNum(int index){
-		if(index<=2){
-			return this.num;
-		}else{
-			return 0;
-		}
+	public int getNum(){
+		return this.num;
 	}
 	
 	public String getSuit(){

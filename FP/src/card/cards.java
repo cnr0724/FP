@@ -4,9 +4,9 @@ import java.util.Random;
 import inter.ArrayHash;
 
 public class cards {
-	ArrayHash<card> deck=new ArrayHash();
-	String[] suits={"Heart", "Spade", "Clover","Diamond"};
-		
+	ArrayHash<card> deck=new ArrayHash<card>();
+	String[] suits={"Heart", "Spade", "Club","Diamond"};
+	
 	public void newDeck(){
 		int i;
 		for(i=0;i<4;i++){
@@ -22,13 +22,19 @@ public class cards {
 		}
 	}
 	
-	public card cardSelect(cards a){
+	public card cardSelect(){
 		Random random=new Random();
 		int i=random.nextInt(3);
 		int j=random.nextInt(12);
-		card c=a.deck.get(suits[i], j);
-		a.deck.get(suits[i], j).cardSelected();
-		return c;
+		card c=new card();
+		while(true){
+			if(deck.get(suits[i], j).getCardUsed()!=true){
+				c=deck.get(suits[i],j);
+				System.out.println("I am selecting "+(j+1));
+				deck.get(suits[i], j).cardSelected();
+				return c;
+			}
+		}
 	}
 	
 	public void cardAdd(card c){
