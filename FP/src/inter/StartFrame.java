@@ -1,9 +1,12 @@
 package inter;
 
 import javax.swing.*;
+
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+@SuppressWarnings("serial")
 public class StartFrame extends JFrame{
 	private int signal=0;
 	public StartFrame(){
@@ -11,9 +14,11 @@ public class StartFrame extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(null);
 		setBounds(300,200,900,600);
+		setBackground(Color.WHITE);
 		
 		JLabel label=new JLabel("The test form");
 		label.setBounds(200, 50, 500, 100);
+		label.setBackground(Color.WHITE);
 		JButton b1=new JButton("1. 게임 시작");
 		b1.setBounds(250,250,400,80);
 		b1.setActionCommand("1");

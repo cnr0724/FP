@@ -24,7 +24,12 @@ public class PlayFrame extends JFrame {
 	JPanel comCard;
 	JPanel plaCard;
 	JPanel ButCard;
+	JPanel WinLose;
 	public Player pl;
+	boolean game=true;
+	boolean end=false;
+	JButton hit;
+	JButton stay;
 	
 	public PlayFrame(Player p){
 		pl=p;
@@ -34,11 +39,13 @@ public class PlayFrame extends JFrame {
 		comCard=new JPanel();
 		plaCard=new JPanel();
 		ButCard=new JPanel();
+		WinLose=new JPanel();
 		String address="back-undo-return-button-png-5.png";
 		ImageIcon ori=new ImageIcon(address);
 		Image newI=imageChange(ori,"button");
 		ori=new ImageIcon(newI);
-		setTitle("Blackjack with the computer");
+		setTitle("Blackjack with the computer - Play Game");
+		
 		total.setLayout(new BorderLayout());
 		panel.setLayout(new FlowLayout());
 		cardPanel.setLayout(new BorderLayout());
@@ -48,24 +55,19 @@ public class PlayFrame extends JFrame {
 		plaCard.setBackground(Color.GRAY);
 		ButCard.setLayout(new GridLayout(1,2));
 		
-		//메인화면으로 가는 버튼
-		JButton returning=new JButton(ori);
-		returning.setBackground(Color.white);
-		returning.setBounds(0,0,50,50);
-		returning.setActionCommand("return");
-		returning.addActionListener(new ButtonClickListener());
-		
+		//카드 받겠다
 		JButton hit=new JButton("Hit");
 		hit.setBackground(Color.WHITE);
 		hit.setActionCommand("Hit");
 		hit.addActionListener(new ButtonClickListener());
 		
+		//카드 받지 않겠다
 		JButton stay=new JButton("Stay");
 		stay.setBackground(Color.WHITE);
 		stay.setActionCommand("Stay");
 		stay.addActionListener(new ButtonClickListener());
 		
-		//이름 입력받기
+		//이름과 얼마 걸지 입력받기
 		JLabel name=new JLabel("Enter your name: ");
 		nameTextField=new JTextField(20);
 		nameTextField.requestFocus();
@@ -76,7 +78,6 @@ public class PlayFrame extends JFrame {
 				name.hide();
 				nameTextField.hide();
 		}});
-		
 		JLabel bet=new JLabel("Enter how much you are going to bet: ");
 		betTF=new JTextField(20);
 		betTF.requestFocus();
@@ -94,6 +95,7 @@ public class PlayFrame extends JFrame {
 		ButCard.add(stay);
 		cardPanel.add(comCard,"North");
 		cardPanel.add(ButCard);
+		cardPanel.add(WinLose,"East");
 		cardPanel.add(plaCard,"South");
 //		cardPanel.add(returning);
 		panel.add(name,"South");
@@ -122,8 +124,12 @@ public class PlayFrame extends JFrame {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-			}else{
-				
+			}else if(command.equals("Stop playing")&end==true){
+				game=false;
+				System.out.println("Stop playing");
+			}else if(command.equals("play again")&end==true){
+				end=false;
+				System.out.println("Again");
 			}
 		}
 	}
@@ -157,25 +163,46 @@ public class PlayFrame extends JFrame {
 		
 		JLabel l=new JLabel(card);
 		
-		if(turn<=2){
-			if(type=="c"){
-				l.setBounds(100*turn+pad*20, 50, 100, 114);
-				comCard.add(l);
-				comCard.revalidate();
-				comCard.validate();
-			}
-			else if(type=="p"){
-				l.setBounds(100*turn+pad*20, 436, 100, 114);
-				plaCard.add(l);
-				plaCard.revalidate();
-				plaCard.validate();
-			}
-		}else{
-			if(type=="c"){
-				
-			}
+
+		if(type=="c"){
+			l.setBounds(100*turn+pad*20, 50, 100, 114);
+			comCard.add(l);
+			comCard.revalidate();
+			comCard.validate();
+		}else if(type=="p"){
+			l.setBounds(100*turn+pad*20, 436, 100, 114);
+			plaCard.add(l);
+			plaCard.revalidate();
+			plaCard.validate();
 		}
+		
 		System.out.println(num+" of "+suit+" of "+turn+" turn added");
+		revalidate();
+		validate();
+	}
+	
+	//다시 할 건지 묻기
+	public void askingAfterEnd(){
+		JPanel q=new JPanel();
+		JPanel a=new JPanel();
+		a.setLayout(new GridLayout(1,2));
+		JLabel question=new JLabel("Do you want to play again?");
+		JButton playAgain=new JButton("Yes");
+		playAgain.setBackground(Color.LIGHT_GRAY);
+		playAgain.setActionCommand("play again");
+		playAgain.addActionListener(new ButtonClickListener());
+		JButton stopPlaying=new JButton("No");
+		stopPlaying.setBackground(Color.lightGray);
+		stopPlaying.setActionCommand("Stop playing");
+		stopPlaying.addActionListener(new ButtonClickListener());
+			
+		q.add(question);
+		a.add(playAgain);
+		a.add(stopPlaying);
+		WinLose.add(q, "North");
+		WinLose.add(a,"South");
+		WinLose.revalidate();
+		WinLose.validate();
 		revalidate();
 		validate();
 	}
@@ -202,6 +229,14 @@ public class PlayFrame extends JFrame {
 	
 	public void resetCom(){
 		command=null;
+	}
+	
+	public void gameEnd(){
+		end=true;
+	}
+	
+	public boolean again(){
+		return game;
 	}
 	
 	

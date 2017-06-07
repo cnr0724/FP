@@ -10,7 +10,9 @@ public class Player {
 	
 	public void setPlayerName(String name){
 		playerName=name;
-		System.out.println(playerName);
+		if(name!=null){
+			System.out.println(playerName);
+		}
 	}
 	
 	public String getPlayerName(){
@@ -18,11 +20,15 @@ public class Player {
 	}
 	
 	public void setBet(int b){
-		if(b>100){
+		if(b>this.money){
 			System.out.println("Enter smaller value");
+		}else if(b<=0){
+			System.out.println("Enter bigger value");
 		}else{
 			bet=b;
-			System.out.println(bet);
+			if(bet!=0){
+				System.out.println(bet);
+			}
 		}
 	}
 	
