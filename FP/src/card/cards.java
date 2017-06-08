@@ -30,7 +30,6 @@ public class cards {
 		while(true){
 			if(deck.get(suits[i], j).getCardUsed()!=true){
 				c=deck.get(suits[i],j);
-				System.out.println("I am selecting "+(j+1));
 				deck.get(suits[i], j).cardSelected();
 				return c;
 			}

@@ -2,7 +2,9 @@ package inter;
 
 import javax.swing.*;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -12,13 +14,18 @@ public class StartFrame extends JFrame{
 	public StartFrame(){
 		setTitle("Blackjack with the computer");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLayout(null);
+		setLayout(new BorderLayout());
 		setBounds(300,200,900,600);
-		setBackground(Color.WHITE);
+		JPanel p=new JPanel();
+		p.setLayout(null);
+		p.setBackground(Color.WHITE);
+		p.setBounds(0,0,900,600);
+		Font font=new Font("Courier",Font.BOLD,40);
 		
-		JLabel label=new JLabel("The test form");
-		label.setBounds(200, 50, 500, 100);
+		JLabel label=new JLabel("The game");
+		label.setBounds(350, 0, 300, 300);
 		label.setBackground(Color.WHITE);
+		label.setFont(font);
 		JButton b1=new JButton("1. 게임 시작");
 		b1.setBounds(250,250,400,80);
 		b1.setActionCommand("1");
@@ -32,10 +39,12 @@ public class StartFrame extends JFrame{
 		b3.setActionCommand("3");
 		b3.addActionListener(new ButtonClickListener());
 
-		add(label);
-		add(b1);
-		add(b2);
-		add(b3);
+		p.add(label,"Center");
+		p.add(b1);
+		p.add(b2);
+		p.add(b3);
+
+		getContentPane().add(p);
 
 		setVisible(true);
 	}

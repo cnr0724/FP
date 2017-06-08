@@ -15,10 +15,6 @@ public class Player {
 		}
 	}
 	
-	public String getPlayerName(){
-		return playerName;
-	}
-	
 	public void setBet(int b){
 		if(b>this.money){
 			System.out.println("Enter smaller value");
@@ -34,7 +30,12 @@ public class Player {
 	
 	public void addBet(int b){
 		money+=b*2;
-		bet=0;
+		this.bet=0;
+	}
+	
+	public void subBet(int b){
+		money-=b;
+		this.bet=0;
 	}
 	
 	public void addSum(int a){
@@ -43,6 +44,10 @@ public class Player {
 	
 	public int getBet(){
 		return bet;
+	}
+	
+	public void setMon(int a){
+		this.money=a;
 	}
 	
 	public int getMon(){

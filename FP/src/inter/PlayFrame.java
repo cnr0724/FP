@@ -26,10 +26,13 @@ public class PlayFrame extends JFrame {
 	JPanel ButCard;
 	JPanel WinLose;
 	public Player pl;
-	boolean game=true;
+	public boolean game=false;
 	boolean end=false;
 	JButton hit;
 	JButton stay;
+	public boolean checked=false;
+	public boolean sav=false;
+	public boolean savchecked=false;
 	
 	public PlayFrame(Player p){
 		pl=p;
@@ -111,25 +114,26 @@ public class PlayFrame extends JFrame {
 		setVisible(true);
 	}
 	
-	
+	//버튼 제어
 	private class ButtonClickListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
 			command=e.getActionCommand();
 			if(command.equals("return")){
 				dispose();
 			}else if(command.equals("Hit")){
-				try {
-					wait(20);
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
 			}else if(command.equals("Stop playing")&end==true){
+				checked=true;
 				game=false;
 				System.out.println("Stop playing");
-			}else if(command.equals("play again")&end==true){
+			}else if(command.equals("Play again")&end==true){
+				checked=true;
+				game=true;
 				end=false;
 				System.out.println("Again");
+			}else if(command.equals("Save Yes")&end==true){
+				savchecked=true;
+				sav=true;
+				System.out.println("Save");
 			}
 		}
 	}
@@ -175,32 +179,48 @@ public class PlayFrame extends JFrame {
 			plaCard.revalidate();
 			plaCard.validate();
 		}
-		
-		System.out.println(num+" of "+suit+" of "+turn+" turn added");
 		revalidate();
 		validate();
 	}
 	
-	//다시 할 건지 묻기
+	//다시 할 건지+저장할 건지 묻기
 	public void askingAfterEnd(){
 		JPanel q=new JPanel();
 		JPanel a=new JPanel();
 		a.setLayout(new GridLayout(1,2));
+		JPanel savq=new JPanel();
+		JPanel sava=new JPanel();
+		sava.setLayout(new GridLayout(1,2));
+		WinLose.setLayout(new GridLayout(4,1));
 		JLabel question=new JLabel("Do you want to play again?");
 		JButton playAgain=new JButton("Yes");
 		playAgain.setBackground(Color.LIGHT_GRAY);
-		playAgain.setActionCommand("play again");
+		playAgain.setActionCommand("Play again");
 		playAgain.addActionListener(new ButtonClickListener());
 		JButton stopPlaying=new JButton("No");
 		stopPlaying.setBackground(Color.lightGray);
 		stopPlaying.setActionCommand("Stop playing");
 		stopPlaying.addActionListener(new ButtonClickListener());
-			
+		
+		JLabel savquestion=new JLabel("Do you want to save your record?");
+		JButton savYes=new JButton("Yes");
+		savYes.setBackground(Color.LIGHT_GRAY);
+		savYes.setActionCommand("Save Yes");
+		savYes.addActionListener(new ButtonClickListener());
+		JButton savNo=new JButton("No");
+		savNo.setBackground(Color.LIGHT_GRAY);
+		
+		savq.add(savquestion);
+		sava.add(savYes);
+		sava.add(savNo);
+		
 		q.add(question);
 		a.add(playAgain);
 		a.add(stopPlaying);
-		WinLose.add(q, "North");
-		WinLose.add(a,"South");
+		WinLose.add(q);
+		WinLose.add(a);
+		WinLose.add(savq);
+		WinLose.add(sava);
 		WinLose.revalidate();
 		WinLose.validate();
 		revalidate();
@@ -238,6 +258,4 @@ public class PlayFrame extends JFrame {
 	public boolean again(){
 		return game;
 	}
-	
-	
 }
