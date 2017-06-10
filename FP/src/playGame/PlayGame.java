@@ -1,6 +1,7 @@
 package playGame;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import card.*;
 import player.*;
@@ -11,6 +12,13 @@ public class PlayGame {
 	@SuppressWarnings("deprecation")
 	public static void main(String[] args) throws IOException{
 		String filename="record.txt";
+		RecordReader checking=new RecordReader(filename);
+		ArrayList<PlayerRecord> pra=new ArrayList<PlayerRecord>();
+		String[] words=checking.text.split("\n");
+		for(int i=0;i<(words.length/4);i++){
+			PlayerRecord pr=new PlayerRecord(words[i],Integer.parseInt(words[i+1]),Integer.parseInt(words[i+2]),Integer.parseInt(words[i+3]));
+			pra.add(pr);
+		}
 		StartFrame sf=new StartFrame();
 		int key=0;
 		for(;;){
@@ -22,44 +30,42 @@ public class PlayGame {
 		if(key==1){
 			//게임 플레이
 			boolean play=true;
-			String nam = null;
-			int mon=0;
-			int ke=0;
 			
-			while(play==true){
-				ke++;
+			while(play){
 				Player p=new Player();
 				PlayFrame pf=new PlayFrame(p);
 				Computer c=new Computer();
 				cards deck=new cards();
 				card card=new card();
+				
 				int turn=1;
 				String select = null;
 				boolean tie=false;
 				int stayNum=0;
-				RecordReader checking=new RecordReader(filename);
 				
-				while(p.playerName==null){
-					String playername=pf.getName();
-					p.setPlayerName(playername);
-				}
-/*				if(ke>=1&(checking.text.contains(p.playerName))){
+				System.out.println("Checkingtext:\n"+checking.text);
+				
+				while(p.playerName==null){}
+				int numGame=Integer.parseInt(pf.getName().substring(5, pf.getName().length()))+1;
+				p.setPlayerName(pf.pl.playerName);
+				System.out.println("The "+numGame+"th game's player name is "+p.playerName);
+				
+				if(checking.text.contains(p.playerName)){
 					int i=0;
-					String[] words=checking.text.split("\n");
+					int playing = 0;
 					for(;i<words.length;i++){
 						if(words[i]==p.playerName){
-							break;
+							playing=i;
 						}
 					}
-					String mOney=words[i+1];
-					p.setMon(Integer.parseInt(mOney));
-					pf.pl.setMon(Integer.parseInt(mOney));
-				}*/
+					p.setMon(Integer.parseInt(words[playing+1]));
+					pf.pl.setMon(Integer.parseInt(words[playing+1]));
+					System.out.println("Player's current money: "+p.getMon());
+					
+				}
+				
 				while(p.getBet()==0){
-					int b=pf.pl.getBet();
-					if(b>0&b<p.getMon()){
-						p.setBet(b);
-					}
+						p.setBet(pf.pl.getBet());
 				}
 				pf.panel.hide();
 			
@@ -72,6 +78,7 @@ public class PlayGame {
 					p.playersDeckpu.cardAdd(card);
 					p.addSum(card.getNum());
 					pf.addCard("p", card, turn);
+					
 					card=deck.cardSelect();
 					c.computersDeckpu.cardAdd(card);
 					c.addSumpu(card.getNum());
@@ -82,11 +89,11 @@ public class PlayGame {
 			
 				for(;;turn++){
 					select=null;
+					if((p.getSum()==c.getSum())&(p.getSum()>=17)){
+						tie=true;
+					}
 					if(p.getSum()>=21|c.getSum()>=21){
 						break;
-					}
-					if((p.getSum()==c.getSum())&p.getSum()>=17){
-						tie=true;
 					}
 				
 					while(select==null){
@@ -120,59 +127,78 @@ public class PlayGame {
 					if(p.getSum()>=21|c.getSum()>=21){
 						break;
 					}
-					pf.resetCom();		
+					pf.resetCom();
 				}
 			
+				//tie
 				if(tie==true){
 					p.setBet(0);
 					System.out.println("It's a tie");
-				}else if(p.getSum()>21&c.getSum()>21){
+					p.lose();
+				}
+				//both number bigger than 21
+				else if(p.getSum()>21&c.getSum()>21){
 					int pla=p.getSum()-21;
 					int com=c.getSum()-21;
 					if(pla>com){
 						System.out.println("--You lose");
 						p.subBet(p.getBet());
+						p.lose();
 					}else{
 						System.out.println("--You won!");
 						p.addBet(p.getBet());
+						p.win();
 					}
-				}else if(p.getSum()>21|c.getSum()==21){
+				}
+				//if player number>21 or computer=blackjack
+				else if(p.getSum()>21|c.getSum()==21){
 					System.out.println("--You lose");
 					p.subBet(p.getBet());
-				}else if(c.getSum()>21|p.getSum()==21){
+					p.lose();
+				}
+				//if computer number>21 or player=blackjack
+				else if(c.getSum()>21|p.getSum()==21){
 					System.out.println("--You won!");
 					p.addBet(p.getBet());
-				}else{
+					p.win();
+				}
+				//both smaller than 21
+				else{
 					int pla=21-p.getSum();
 					int com=21-c.getSum();
 					if(pla>com){
 						System.out.println("--You lose");
 						p.subBet(p.getBet());
+						p.lose();
 					}else{
 						System.out.println("--You won!");
 						p.addBet(p.getBet());
+						p.win();
 					}
 				}
 				
-				System.out.println(p.playerName+"'s current money1 is "+p.getMon());
+				System.out.println("The sum of the computer's deck was "+c.getSum());
+				System.out.println(p.playerName+"'s current money is "+p.getMon());
 				pf.gameEnd();
 				System.out.println(pf.checked);
 				pf.askingAfterEnd();
 				while(pf.savchecked==false){}
 				boolean sav=pf.sav;
+				
+				//if player choose to save the record
 				if(sav){
-					mon=p.getMon();
-					nam=p.playerName;
-					RecordReader rr=new RecordReader(filename);
-					RecordWriter rw=new RecordWriter(filename,rr.text,nam,mon);
+					PlayerRecord pr=new PlayerRecord(p.playerName,p.getMon(),p.getGN(),p.getWN());
+					SerializeRecord sr=new SerializeRecord(pr);
+					sr.recordToServer();
 				}
-				play=false;
+
 				while(pf.checked==false){}
 				play=pf.game;
 				if(play==false){
 					pf.dispose();
 				}
 			}
+			RecordWriter rw=new RecordWriter(filename,pra);
 		}else if(key==2){
 			//기록 조회
 				SearchFrame sf1=new SearchFrame();

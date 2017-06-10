@@ -8,7 +8,6 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import playGame.*;
 import player.Player;
 import card.*;
 
@@ -47,6 +46,7 @@ public class PlayFrame extends JFrame {
 		ImageIcon ori=new ImageIcon(address);
 		Image newI=imageChange(ori,"button");
 		ori=new ImageIcon(newI);
+		
 		setTitle("Blackjack with the computer - Play Game");
 		
 		total.setLayout(new BorderLayout());
@@ -58,19 +58,19 @@ public class PlayFrame extends JFrame {
 		plaCard.setBackground(Color.GRAY);
 		ButCard.setLayout(new GridLayout(1,2));
 		
-		//카드 받겠다
+		//Getting new card
 		JButton hit=new JButton("Hit");
 		hit.setBackground(Color.WHITE);
 		hit.setActionCommand("Hit");
 		hit.addActionListener(new ButtonClickListener());
 		
-		//카드 받지 않겠다
+		//Staying
 		JButton stay=new JButton("Stay");
 		stay.setBackground(Color.WHITE);
 		stay.setActionCommand("Stay");
 		stay.addActionListener(new ButtonClickListener());
 		
-		//이름과 얼마 걸지 입력받기
+		//Name and bet
 		JLabel name=new JLabel("Enter your name: ");
 		nameTextField=new JTextField(20);
 		nameTextField.requestFocus();
@@ -100,7 +100,6 @@ public class PlayFrame extends JFrame {
 		cardPanel.add(ButCard);
 		cardPanel.add(WinLose,"East");
 		cardPanel.add(plaCard,"South");
-//		cardPanel.add(returning);
 		panel.add(name,"South");
 		panel.add(nameTextField,"South");
 		panel.add(bet,"South");
@@ -130,7 +129,7 @@ public class PlayFrame extends JFrame {
 				game=true;
 				end=false;
 				System.out.println("Again");
-			}else if(command.equals("Save Yes")&end==true){
+			}else if(command.equals("Save yes")&end==true){
 				savchecked=true;
 				sav=true;
 				System.out.println("Save");
@@ -146,7 +145,7 @@ public class PlayFrame extends JFrame {
 		int pad=num-1;
 		ImageIcon card = null;
 		
-		if(type=="c"&((turn==1)|(turn>2))){
+		if(type=="c"&(turn==1)){
 			card=new ImageIcon("playing-card-back-side.jpg");
 		}else{
 			if(num==1){
@@ -194,7 +193,7 @@ public class PlayFrame extends JFrame {
 		WinLose.setLayout(new GridLayout(4,1));
 		JLabel question=new JLabel("Do you want to play again?");
 		JButton playAgain=new JButton("Yes");
-		playAgain.setBackground(Color.LIGHT_GRAY);
+		playAgain.setBackground(Color.lightGray);
 		playAgain.setActionCommand("Play again");
 		playAgain.addActionListener(new ButtonClickListener());
 		JButton stopPlaying=new JButton("No");

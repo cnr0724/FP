@@ -7,12 +7,11 @@ public class Player {
 	int money=100;
 	int bet=0;
 	int sum=0;
+	int gameNum=0;
+	int winNum=0;
 	
 	public void setPlayerName(String name){
 		playerName=name;
-		if(name!=null){
-			System.out.println(playerName);
-		}
 	}
 	
 	public void setBet(int b){
@@ -58,5 +57,20 @@ public class Player {
 		return sum;
 	}
 	
-
+	public int getWN(){
+		return winNum;
+	}
+	
+	public int getGN(){
+		return gameNum;
+	}
+	
+	public void win(){
+		gameNum++;
+		winNum++;
+	}
+	
+	public void lose(){
+		gameNum++;
+	}
 }
